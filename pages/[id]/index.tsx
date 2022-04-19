@@ -27,7 +27,7 @@ export default SurveyPage
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
     const id = context.params!.id as string
 
-    const client = new MongoClient("mongodb+srv://janosmaitner:J9JCCvfh3KQFxhxi@cluster0.zwaeg.mongodb.net/next-survey?retryWrites=true&w=majority")
+    const client = new MongoClient(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.zwaeg.mongodb.net/next-survey?retryWrites=true&w=majority`)
 
     try {
         await client.connect()
