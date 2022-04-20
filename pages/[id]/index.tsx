@@ -1,7 +1,9 @@
 import { GetServerSideProps } from "next"
-import { MongoClient, ObjectId } from 'mongodb'
+import { ObjectId } from 'mongodb'
+import getClient from "db/db";
 
 import Survey from 'components/Survey/Survey';
+import Head from "next/head";
 
 type Props = {
     survey?: {
@@ -16,9 +18,14 @@ type Props = {
 
 const SurveyPage = ({ survey }: Props) => {
     return (
-        <div className="min-h-screen p-4 bg-gray-200 flex flex-col items-center">
-            <Survey survey={survey!} />
-        </div>
+        <>
+            <Head>
+                <title>{survey?.title || 'Survey not found'}</title>
+            </Head>
+            <div className="min-h-screen p-4 bg-gray-200 flex flex-col items-center">
+                <Survey survey={survey!} />
+            </div>
+        </>
     )
 }
 
@@ -27,7 +34,7 @@ export default SurveyPage
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
     const id = context.params!.id as string
 
-    const client = new MongoClient(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.zwaeg.mongodb.net/next-survey?retryWrites=true&w=majority`)
+    const client = getClient()
 
     try {
         await client.connect()
