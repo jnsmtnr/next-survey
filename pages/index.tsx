@@ -8,9 +8,7 @@ type Props = {
 }
 
 const Home: NextPage<Props> = (props) => {
-    return (
-        <Welcome surveys={props.surveys} />
-    )
+    return <Welcome surveys={props.surveys} />
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {

@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb'
 import getClient from "db/db";
 
 import Survey from 'components/Survey/Survey';
-import Head from "next/head";
+import NotFound from 'components/Survey/NotFound'
 
 type Props = {
     survey?: {
@@ -17,16 +17,9 @@ type Props = {
 }
 
 const SurveyPage = ({ survey }: Props) => {
-    return (
-        <>
-            <Head>
-                <title>{survey?.title || 'Survey not found'}</title>
-            </Head>
-            <div className="min-h-screen p-4 bg-gray-200 flex flex-col items-center">
-                <Survey survey={survey!} />
-            </div>
-        </>
-    )
+    if (survey) return <Survey survey={survey} />
+    
+    return <NotFound />
 }
 
 export default SurveyPage
@@ -44,7 +37,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
         const survey = await surveys.findOne({ _id: new ObjectId(id) })
 
         if (!survey) {
-            throw new Error('nem nyert');
+            throw new Error('Survey not found');
         }
 
         return {
@@ -59,7 +52,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
     } catch(e: any) {
         return { 
             props: { 
-                error: e.message
+                error: {
+                    message: e.message
+                }
             } 
         }
     } finally {
