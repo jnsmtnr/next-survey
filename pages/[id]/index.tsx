@@ -5,12 +5,10 @@ import getClient from "db/db";
 import Survey from 'components/Survey/Survey';
 import NotFound from 'components/Survey/NotFound'
 
+import { SurveyProps } from 'types/types'
+
 type Props = {
-    survey?: {
-        id: string,
-        title: string,
-        description: string
-    },
+    survey?: SurveyProps,
     error?: {
         message: string
     },
@@ -45,7 +43,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (context) => 
                 survey: {
                     id: survey._id.toString(),
                     title: survey.title,
-                    description: survey.description
+                    description: survey.description,
+                    questions: survey.questions || []
                 },
             }
         }
