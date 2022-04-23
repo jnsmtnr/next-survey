@@ -14,4 +14,5 @@ export type QuestionProps = {
 
 export enum QuestionType {
     Text = 1,
+    TextArea,
 }
