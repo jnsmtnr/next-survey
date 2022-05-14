@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { SurveyProps } from "types/types";
 import Question from "./Question/Question";
 
@@ -17,6 +17,14 @@ const Survey = ({ survey }: Props) => {
         }));
     }
 
+    const orderedQuestions = useMemo(() => Object.entries(survey.questions)
+        .map(([id, question]) => ({
+            id,
+            ...question
+        }))
+        .sort((a,b) => a.order - b.order)
+    , [survey])
+
     return (
         <>
             <Head>
@@ -29,14 +37,15 @@ const Survey = ({ survey }: Props) => {
                         <h2>{survey.description}</h2>
                     </div>
                     <div className="mt-8 space-y-8">
-                        {Object.entries(survey.questions).map(([id, q]) => (
-                            <Question 
-                                key={id} 
+                        {orderedQuestions.map(q => (
+                            <Question
+                                key={q.id} 
                                 question={q} 
-                                answer={answers[id]} 
-                                onChange={(value) => onChangeHandler(id, value)} 
+                                answer={answers[q.id]} 
+                                onChange={(value) => onChangeHandler(q.id, value)} 
                             />
-                        ))}
+                            )
+                        )}
                     </div>
                 </div>
             </div>
