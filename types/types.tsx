@@ -4,12 +4,13 @@ export type SurveyProps = {
     description: string,
     questions: {
         [id: string]: QuestionProps
-    }
+    },
 }
 
 export type QuestionProps = {
     type: QuestionType,
     title: string,
+    order: number,
 }
 
 export enum QuestionType {
