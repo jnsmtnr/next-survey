@@ -1,5 +1,5 @@
 import getClient from 'db/db'
-import type { GetServerSideProps, NextPage } from 'next'
+import type { GetStaticProps, NextPage } from 'next'
 
 import Welcome from 'components/Welcome/Welcome'
 
@@ -11,7 +11,7 @@ const Home: NextPage<Props> = (props) => {
     return <Welcome surveys={props.surveys} />
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
+export const getStaticProps: GetStaticProps<Props> = async () => {
     const client = getClient()
 
     try {
