@@ -11,9 +11,13 @@ export type QuestionProps = {
     type: QuestionType,
     title: string,
     order: number,
+    options?: {
+        [id: string]: string
+    },
 }
 
 export enum QuestionType {
     Text = 1,
     TextArea,
+    SingleChoice,
 }
