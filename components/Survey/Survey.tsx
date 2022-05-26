@@ -26,7 +26,7 @@ const Survey = ({ survey }: Props) => {
     , [survey])
 
     const sendAnswers = () => {
-        console.log(answers)
+        console.log(answers) // TODO: placeholder for api call
     }
 
     return (
