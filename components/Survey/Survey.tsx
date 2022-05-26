@@ -25,13 +25,17 @@ const Survey = ({ survey }: Props) => {
         .sort((a,b) => a.order - b.order)
     , [survey])
 
+    const sendAnswers = () => {
+        console.log(answers) // TODO: placeholder for api call
+    }
+
     return (
         <>
             <Head>
                 <title>{survey.title}</title>
             </Head>
             <div className="min-h-screen p-4 bg-gray-200 flex flex-col items-center">
-                <div className="bg-white p-2 max-w-3xl w-full flex-grow shadow rounded">
+                <div className="bg-white p-2 max-w-3xl w-full flex-grow shadow rounded flex flex-col">
                     <div className="text-center">
                         <h1 className="text-xl">{survey.title}</h1>
                         <h2>{survey.description}</h2>
@@ -46,6 +50,14 @@ const Survey = ({ survey }: Props) => {
                             />
                             )
                         )}
+                    </div>
+                    <div className="flex-grow flex flex-col justify-end items-center">
+                        <button 
+                            className="bg-gray-700 hover:bg-gray-600 text-white py-1 px-4 rounded-full" 
+                            onClick={sendAnswers}
+                        >
+                            Küldés
+                        </button>
                     </div>
                 </div>
             </div>
