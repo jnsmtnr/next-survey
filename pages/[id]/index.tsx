@@ -46,7 +46,8 @@ export const getStaticProps: GetStaticProps<Props, { id: string }> = async (cont
                     description: survey.description,
                     questions: survey.questions || []
                 },
-            }
+            },
+            revalidate: 60,
         }
     } catch(e: any) {
         return { 
@@ -71,13 +72,13 @@ export const getStaticPaths: GetStaticPaths<{ id: string }> = async () => {
 
         return {
             paths: surveys.map(survey => ({ params: { id: survey._id.toString() }})),
-            fallback: false
+            fallback: 'blocking'
         }
     }
     catch (e: any) {
         return {
             paths: [],
-            fallback: false
+            fallback: 'blocking'
         }
     }
     finally {
