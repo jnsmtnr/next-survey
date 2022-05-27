@@ -22,7 +22,8 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
         return {
             props: {
                 surveys: surveys.map(survey => ({ id: survey._id.toString(), title: survey.title }))
-            }
+            },
+            revalidate: 60,
         }
     }
     catch (e: any) {
