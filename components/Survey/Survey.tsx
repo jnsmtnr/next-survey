@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useState, useMemo } from "react";
 import { SurveyProps } from "types/types";
 import Question from "./Question/Question";
+import ThankYou from "./ThankYou";
 
 type Props = {
     survey: SurveyProps
@@ -9,6 +10,7 @@ type Props = {
 
 const Survey = ({ survey }: Props) => {
     const [answers, setAnswers] = useState<{ [id: string]: any }>({})
+    const [finished, setFinished] = useState(false)
 
     const onChangeHandler = (id: string, value: any) => {
         setAnswers((prev) => ({
@@ -27,6 +29,7 @@ const Survey = ({ survey }: Props) => {
 
     const sendAnswers = () => {
         console.log(answers) // TODO: placeholder for api call
+        setFinished(true) // only after the api call
     }
 
     return (
@@ -40,25 +43,34 @@ const Survey = ({ survey }: Props) => {
                         <h1 className="text-xl">{survey.title}</h1>
                         <h2>{survey.description}</h2>
                     </div>
-                    <div className="mt-8 space-y-8">
-                        {orderedQuestions.map(q => (
-                            <Question
-                                key={q.id} 
-                                question={q} 
-                                answer={answers[q.id]} 
-                                onChange={(value) => onChangeHandler(q.id, value)} 
-                            />
-                            )
-                        )}
-                    </div>
-                    <div className="flex-grow flex flex-col justify-end items-center">
-                        <button 
-                            className="bg-gray-700 hover:bg-gray-600 text-white py-1 px-4 rounded-full" 
-                            onClick={sendAnswers}
-                        >
-                            Küldés
-                        </button>
-                    </div>
+                    {!finished && (
+                        <>
+                            <div className="mt-8 space-y-8">
+                                {orderedQuestions.map(q => (
+                                    <Question
+                                        key={q.id} 
+                                        question={q} 
+                                        answer={answers[q.id]} 
+                                        onChange={(value) => onChangeHandler(q.id, value)} 
+                                    />
+                                    )
+                                )}
+                            </div>
+                            <div className="mt-8 flex-grow flex flex-col justify-end items-center">
+                                <button 
+                                    className="bg-gray-700 hover:bg-gray-600 text-white py-1 px-4 rounded-full" 
+                                    onClick={sendAnswers}
+                                >
+                                    Send
+                                </button>
+                            </div>
+                        </>
+                    )}
+                    {finished && (
+                        <div className="flex-grow flex justify-center items-center">
+                            <ThankYou />
+                        </div>
+                    )}
                 </div>
             </div>
         </>
