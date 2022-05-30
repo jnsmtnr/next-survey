@@ -11,6 +11,7 @@ type Props = {
 const Survey = ({ survey }: Props) => {
     const [answers, setAnswers] = useState<{ [id: string]: any }>({})
     const [finished, setFinished] = useState(false)
+    const [sending, setSending] = useState(false)
 
     const onChangeHandler = (id: string, value: any) => {
         setAnswers((prev) => ({
@@ -28,8 +29,25 @@ const Survey = ({ survey }: Props) => {
     , [survey])
 
     const sendAnswers = () => {
-        console.log(answers) // TODO: placeholder for api call
-        setFinished(true) // only after the api call
+        setSending(true)
+
+        fetch('/api/answers', {
+            method: 'POST',
+            body: JSON.stringify({
+                id: survey.id,
+                answers
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+              },
+        })
+            .then(response => {
+            if (response.ok) {
+                setFinished(true)
+            }
+        })
+            .catch(error => console.log(error))
+            .finally(() => setSending(false))
     }
 
     return (
@@ -60,8 +78,9 @@ const Survey = ({ survey }: Props) => {
                                 <button 
                                     className="bg-gray-700 hover:bg-gray-600 text-white py-1 px-4 rounded-full" 
                                     onClick={sendAnswers}
+                                    disabled={sending}
                                 >
-                                    Send
+                                    { sending ? 'Sending' : 'Send' }
                                 </button>
                             </div>
                         </>
