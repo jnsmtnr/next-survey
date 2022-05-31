@@ -20,4 +20,5 @@ export enum QuestionType {
     Text = 1,
     TextArea,
     SingleChoice,
+    MultipleChoice,
 }
