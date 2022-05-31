@@ -3,6 +3,7 @@ import { QuestionProps, QuestionType } from "types/types"
 import Text from './Text'
 import TextArea from './TextArea'
 import SingleChoice from './SingleChoice'
+import MultipleChoice from "./MultipleChoice"
 
 type Props = {
     question: QuestionProps,
@@ -17,6 +18,7 @@ const Question = (props: Props) => {
             {props.question.type === QuestionType.Text && <Text answer={props.answer} onChange={props.onChange} />}
             {props.question.type === QuestionType.TextArea && <TextArea answer={props.answer} onChange={props.onChange} />}
             {props.question.type === QuestionType.SingleChoice && <SingleChoice options={props.question.options || {}} answer={props.answer} onChange={props.onChange} />}
+            {props.question.type === QuestionType.MultipleChoice && <MultipleChoice options={props.question.options || {}} answer={props.answer || []} onChange={props.onChange} />}
         </div>
     )
 }
