@@ -14,6 +14,8 @@ export type QuestionProps = {
     options?: {
         [id: string]: string
     },
+    min?: number,
+    max?: number,
 }
 
 export enum QuestionType {
@@ -21,4 +23,5 @@ export enum QuestionType {
     TextArea,
     SingleChoice,
     MultipleChoice,
+    Scale,
 }
