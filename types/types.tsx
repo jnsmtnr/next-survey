@@ -11,6 +11,7 @@ export type QuestionProps = {
     type: QuestionType,
     title: string,
     order: number,
+    page: number,
     options?: {
         [id: string]: string
     },

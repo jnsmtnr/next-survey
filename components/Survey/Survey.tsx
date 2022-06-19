@@ -12,6 +12,7 @@ const Survey = ({ survey }: Props) => {
     const [answers, setAnswers] = useState<{ [id: string]: any }>({})
     const [finished, setFinished] = useState(false)
     const [sending, setSending] = useState(false)
+    const [page, setPage] = useState(1)
 
     const onChangeHandler = (id: string, value: any) => {
         setAnswers((prev) => ({
@@ -20,13 +21,16 @@ const Survey = ({ survey }: Props) => {
         }));
     }
 
-    const orderedQuestions = useMemo(() => Object.entries(survey.questions)
+    const actualQuestions = useMemo(() => Object.entries(survey.questions)
         .map(([id, question]) => ({
             id,
             ...question
         }))
+        .filter(q => q.page === page)
         .sort((a,b) => a.order - b.order)
-    , [survey])
+    , [survey, page])
+
+    const numberOfPages = useMemo(() => Math.max(...Object.values(survey.questions).map(q => q.page)), [survey])
 
     const sendAnswers = () => {
         setSending(true)
@@ -50,6 +54,14 @@ const Survey = ({ survey }: Props) => {
             .finally(() => setSending(false))
     }
 
+    const nextPage = () => {
+        setPage(prevPage => prevPage + 1)
+    }
+
+    const prevPage = () => {
+        setPage(prevPage => prevPage - 1)
+    }
+
     return (
         <>
             <Head>
@@ -64,7 +76,7 @@ const Survey = ({ survey }: Props) => {
                     {!finished && (
                         <>
                             <div className="mt-8 space-y-8">
-                                {orderedQuestions.map(q => (
+                                {actualQuestions.map(q => (
                                     <Question
                                         key={q.id} 
                                         question={q} 
@@ -74,14 +86,26 @@ const Survey = ({ survey }: Props) => {
                                     )
                                 )}
                             </div>
-                            <div className="mt-8 flex-grow flex flex-col justify-end items-center">
-                                <button 
+                            <div className="mt-8 flex-grow flex justify-center items-end space-x-4">
+                                {page > 1 && <button 
+                                    className="hover:bg-gray-100 py-1 px-4 rounded-full" 
+                                    onClick={prevPage}
+                                >
+                                    Previous
+                                </button>}
+                                {page < numberOfPages && <button 
+                                    className="bg-gray-700 hover:bg-gray-600 text-white py-1 px-4 rounded-full" 
+                                    onClick={nextPage}
+                                >
+                                    Next
+                                </button>}
+                                {page === numberOfPages && <button 
                                     className="bg-gray-700 hover:bg-gray-600 text-white py-1 px-4 rounded-full" 
                                     onClick={sendAnswers}
                                     disabled={sending}
                                 >
                                     { sending ? 'Sending' : 'Send' }
-                                </button>
+                                </button>}
                             </div>
                         </>
                     )}
